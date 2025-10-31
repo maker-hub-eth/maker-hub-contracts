@@ -29,7 +29,6 @@ contract BadgeNFT is ERC721, Ownable, IBadgeNFT {
     mapping(uint256 tokenId => BadgeLevel level) private _tokenLevels;
     mapping(uint256 tokenId => uint256 tutorialId) private _tutorialIds;
 
-    event BadgeMinted(address indexed user, uint256 indexed tokenId, uint8 level, uint256 tutorialId);
     event BaseURIUpdated(string newBaseURI);
     event MakerControllerUpdated(address indexed newController);
 

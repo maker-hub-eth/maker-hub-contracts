@@ -1,72 +1,89 @@
 "use client";
 
-import Link from "next/link";
-import type { NextPage } from "next";
-import { useAccount } from "wagmi";
-import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { Address } from "~~/components/scaffold-eth";
+import { CourseCard } from "@/components/CourseCard";
+import { Button } from "@/components/ui/button";
+import { useApp } from "@/contexts/AppContext";
+import { mockCourses } from "@/lib/courses";
+import { Award, BookOpen, Search } from "lucide-react";
 
-const Home: NextPage = () => {
-  const { address: connectedAddress } = useAccount();
+export default function Home() {
+  const { isWalletConnected, connectWallet } = useApp();
 
   return (
-    <>
-      <div className="flex items-center flex-col grow pt-10">
-        <div className="px-5">
-          <h1 className="text-center">
-            <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
+    <div className="w-full">
+      <section className="relative overflow-hidden px-4 py-20 sm:py-32">
+        <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 via-transparent to-purple-500/10" />
+        <div className="relative mx-auto max-w-4xl text-center">
+          <h1 className="text-5xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl">
+            Learn from Makers.
+            <br />
+            <span className="text-teal-500">Earn Onchain.</span>
           </h1>
-          <div className="flex justify-center items-center space-x-2 flex-col">
-            <p className="my-2 font-medium">Connected Address:</p>
-            <Address address={connectedAddress} />
-          </div>
-
-          <p className="text-center text-lg">
-            Get started by editing{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/nextjs/app/page.tsx
-            </code>
+          <p className="mt-6 text-xl leading-8 text-gray-400 max-w-2xl mx-auto">
+            Interactive courses with NFT credentials. Pay only when you complete.
           </p>
-          <p className="text-center text-lg">
-            Edit your smart contract{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              YourContract.sol
-            </code>{" "}
-            in{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/hardhat/contracts
-            </code>
-          </p>
+          {!isWalletConnected && (
+            <div className="mt-10">
+              <Button
+                onClick={connectWallet}
+                size="lg"
+                className="bg-teal-500 hover:bg-teal-600 text-white font-semibold text-lg px-8 py-6 h-auto"
+              >
+                Connect Wallet to Start
+              </Button>
+            </div>
+          )}
         </div>
+      </section>
 
-        <div className="grow bg-base-300 w-full mt-16 px-8 py-12">
-          <div className="flex justify-center items-center gap-12 flex-col md:flex-row">
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <BugAntIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Tinker with your smart contract using the{" "}
-                <Link href="/debug" passHref className="link">
-                  Debug Contracts
-                </Link>{" "}
-                tab.
+      <section className="px-4 py-16 bg-gray-900/50">
+        <div className="mx-auto max-w-7xl">
+          <h2 className="text-3xl font-bold text-center text-white mb-12">How It Works</h2>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="rounded-full bg-teal-500/10 p-4 border border-teal-500/20">
+                <Search className="h-8 w-8 text-teal-500" />
+              </div>
+              <h3 className="text-xl font-semibold text-white">Choose Your Path</h3>
+              <p className="text-gray-400">
+                Browse courses from expert makers in creative coding, Web3, and interactive art
               </p>
             </div>
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <MagnifyingGlassIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Explore your local transactions with the{" "}
-                <Link href="/blockexplorer" passHref className="link">
-                  Block Explorer
-                </Link>{" "}
-                tab.
+
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="rounded-full bg-teal-500/10 p-4 border border-teal-500/20">
+                <BookOpen className="h-8 w-8 text-teal-500" />
+              </div>
+              <h3 className="text-xl font-semibold text-white">Complete Tutorials</h3>
+              <p className="text-gray-400">
+                Learn at your own pace with interactive lessons, videos, and hands-on projects
               </p>
+            </div>
+
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="rounded-full bg-teal-500/10 p-4 border border-teal-500/20">
+                <Award className="h-8 w-8 text-teal-500" />
+              </div>
+              <h3 className="text-xl font-semibold text-white">Earn NFT Badges</h3>
+              <p className="text-gray-400">Prove your skills with verifiable onchain certificates</p>
             </div>
           </div>
         </div>
-      </div>
-    </>
+      </section>
+
+      <section className="px-4 py-16">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold text-white">Featured Courses</h2>
+            <p className="mt-2 text-gray-400">Start learning from the best makers in the space</p>
+          </div>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {mockCourses.map(course => (
+              <CourseCard key={course.id} course={course} />
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
   );
-};
-
-export default Home;
+}
