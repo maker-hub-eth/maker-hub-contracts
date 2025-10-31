@@ -8,6 +8,7 @@ import {IBadgeNFT} from "./interfaces/IBadgeNFT.sol";
 import {IEscrowVault} from "./interfaces/IEscrowVault.sol";
 import {IReputationTracker} from "./interfaces/IReputationTracker.sol";
 import {IMetadataManager} from "./interfaces/IMetadataManager.sol";
+import {IOwnable2Step} from "./interfaces/IOwnable2Step.sol";
 
 contract MakerController is Ownable2Step, ReentrancyGuard {
     struct UserProfile {
@@ -156,5 +157,12 @@ contract MakerController is Ownable2Step, ReentrancyGuard {
         }
 
         newTotal = reputationTracker.addXP(wallet, amount);
+    }
+
+    function claimModuleOwnership(address module) external onlyOwner {
+        if (module == address(0)) {
+            revert ZeroAddress();
+        }
+        IOwnable2Step(module).acceptOwnership();
     }
 }

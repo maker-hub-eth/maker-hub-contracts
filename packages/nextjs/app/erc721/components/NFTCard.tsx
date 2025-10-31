@@ -44,8 +44,8 @@ export const NFTCard = ({ nft, transfer }: { nft: Collectible; transfer?: boolea
                       functionName: "transferFrom",
                       args: [nft.owner, transferToAddress, BigInt(nft.id.toString())],
                     });
-                  } catch (err) {
-                    console.error("Error calling transferFrom function");
+                  } catch (error) {
+                    console.error("Error calling transferFrom function", error);
                   }
                 }}
               >
